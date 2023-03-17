@@ -1,0 +1,61 @@
+@use '../shared.scss';
+
+#SimpleMenu {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-right: solid 1px #2e2e2e;
+
+  h2 {
+    font-weight: normal;
+    font-size: 1.4em;
+    color: white;
+    border-bottom: solid 1px rgb(68, 68, 68);
+    margin: 0px 10px 20px 10px;
+    padding: 15px 0 10px 0;
+    text-align: center;
+  }
+
+  ul {
+    list-style-type: none;
+    
+    li {
+      margin: 10px 0;
+
+      a {
+        font-size: 1.1em;
+        line-height: 2;
+        padding: 3px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+  
+        &.Selected {
+          color: white;
+          background-color: shared.$selectedMenuColor;
+          font-weight: bold;
+        }
+    
+        &:not(.Selected) {
+          color: #818181;
+
+          &:hover {
+            background-color: #2a2a2a;
+          }
+        }
+      }
+    }
+  }
+}
+
+#SimplePage {
+  width: 100%;
+  height: 100%;
+
+  > .Page {
+    width: 100%;
+    height: calc(100% - shared.$headerHeight);
+    box-sizing: border-box;
+    padding-top: 100px;
+  }
+}

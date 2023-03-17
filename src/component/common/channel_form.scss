@@ -1,0 +1,80 @@
+.ChannelForm {
+  color: #d3d3d3;
+  width: 400px;
+  padding: 30px;
+  background-color: #27282c;
+  border-radius: 6px;
+
+  .Title {
+    border-bottom: solid 1px rgb(68, 68, 68);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+
+    h2 {
+      font-weight: normal;
+      font-size: 1.4em;
+      color: white;
+      flex-grow: 1;
+    }
+
+    svg {
+      width: 25px;
+      height: 25px;
+
+      &:hover {
+        color: #e23838;
+        cursor: pointer;
+      }
+    }
+  }
+
+  h3 {
+    font-size: 1.2em;
+    color: #b30032;
+    margin-bottom: 7px;
+  }
+
+  .TextArea {
+    font-size: 1.1em;
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .TextArea.Multiline {
+    height: 200px;
+  }
+
+  .Buttons {
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > * {
+      display: block;
+    }
+
+    a {
+      color: white;
+      width: 24px;
+      height: 24px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+
+        &:hover {
+          color: #e23838;
+        }
+      }
+    }
+
+    .Button {
+      padding: 5px 15px;
+    }
+  }
+}

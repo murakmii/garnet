@@ -1,0 +1,57 @@
+@use './shared.scss';
+
+.Toastify__toast {
+  box-shadow: 0 0 10px black;
+}
+
+.Toastify__toast-theme--dark {
+  background-color: #2d2f36;
+}
+
+#App {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#Sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #1d1d1d;
+
+  > h1 {
+    font-weight: normal;
+    font-size: 1.6em;
+    height: shared.$headerHeight;
+    line-height: shared.$headerHeight;
+    box-sizing: border-box;
+    padding: 0 10px;
+    background-color: #db3737;
+    text-align: center;
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+  }
+
+  > .Content {
+    height: calc(100% - shared.$headerHeight);
+  }
+}
+
+#Main {
+  flex-grow: 1;
+  height: 100%;
+}
+
+#Error {
+  width: 100%;
+  height: 100%;
+
+  .Page {
+    width: 100%;
+    height: calc(100% - shared.$headerHeight);
+    overflow-y: hidden;
+  }
+}

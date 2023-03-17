@@ -1,0 +1,264 @@
+@use '../shared.scss';
+@use 'sass:math';
+
+$inputMessageHeight: 130px;
+
+#ChannelView {
+  width: 100%;
+  height: 100%;
+
+  #PageHeader {
+    h2 {
+      svg {
+        font-size: 0.8em;
+        padding-left: 7px;
+        cursor: pointer;
+
+        &:hover {
+          color: #EEE;
+        }
+      }
+    }
+  }
+
+  .PageContent {
+    width: 100%;
+    height: calc(100% - shared.$headerHeight);
+    display: flex;
+    position: relative;
+
+    .Center {
+      width: calc(100% - 250px);
+      height: 100%;
+    }
+  }
+
+  .Messages {
+    width: 100%;
+    height: calc(100% - $inputMessageHeight);
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding: 10px 16px;
+
+    .Message {
+      width: 100%;
+      margin: 10px 0;
+      display: flex;
+      animation-name: onAddedElement;
+      animation-duration: 0.5s;
+  
+      .Icon {
+        width: 40px;
+        margin-right: 8px;
+        padding-top: 3px;
+
+        * {
+          width: 40px;
+          height: 40px;
+          display: block;
+        }
+  
+        a {
+          transition-property: opacity;
+          transition-duration: .2s;
+
+          &:hover {
+            opacity: .6;
+          }
+        }
+
+        img {
+          border-radius: 20px;
+        }
+      }
+  
+      .Content {
+        color: #e6e6e6;
+        font-size: 0.95em;
+        
+        background-color: #27282c;
+        padding: 6px 10px;
+        border-radius: 5px;
+        border: solid 1px #2f2f34;
+
+        .UserName {
+          color: rgb(90 90 90);
+          line-height: 1.2;
+
+          i {
+            font-size: 0.9em;
+            padding-left: 10px;
+          }
+        }
+
+        .Main {
+          margin-top: 6px;
+        }
+      }
+    }
+  } 
+
+  @keyframes onAddedElement {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  form[name="inputMessage"] {
+    height: $inputMessageHeight;
+    background-color: #1d1d1d;
+    box-sizing: border-box;
+    border-top: solid 1px #2e2e2e;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+
+    .TextArea {
+      width: 100%;
+      font-size: 1.1em;
+      flex-grow: 1;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .Buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      > * {
+        display: block;
+      }
+
+      a {
+        color: white;
+        width: 24px;
+        height: 24px;
+  
+        svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+  
+          &:hover {
+            color: #e23838;
+          }
+        }
+      }
+
+      .Button {
+        width: 60px;
+        height: 30px;
+        font-size: 1.3em;
+      }
+    }
+
+    .RequireSignIn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(2px);
+
+      .Button {
+        height: 36px;
+        font-size: 1.2em;
+        padding: 0 30px;
+        margin: auto;
+        margin-top: math.div($inputMessageHeight, 2) - 18px;
+        display: block;
+      }
+    }
+  }
+
+  .ChannelMetadata {
+    width: 250px;
+    padding: 15px 0;
+    background-color: #1d1d1d;
+    border-left: solid 1px #0e0e0e;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .Banner {
+      width: 250px;
+      height: 150px;
+      margin-bottom: 15px;
+      background-size: cover;
+      background-position: center center;
+    }
+
+    .Markdown {
+      margin-bottom: 20px;
+      padding: 0 15px;
+    }
+
+    > h3 {
+      color: #b30032;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      padding: 0 15px;
+
+      &.About {
+        svg {
+          color: white;
+          float: right;
+
+          &:hover {
+            color: #e23838;
+            cursor: pointer;
+          }
+        }
+
+        span {
+          clear: both;
+        }
+      }
+    }
+
+    > p {
+      color: rgb(90, 90, 90);
+      padding: 0 15px;
+      margin: 15px 0;
+    }
+
+    .Creator {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+
+      a, img {
+        width: 30px;
+        height: 30px;
+        display: block;
+      }
+
+      a {
+        margin-right: 8px;
+        transition-property: opacity;
+        transition-duration: .2s;
+
+        &:hover {
+          opacity: .6;
+        }
+      }
+
+      img {
+        border-radius: 15px;
+      }
+
+      b {
+        color: #dbdbdb;
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+#BasicSetting {
+  h3 {
+    color: #b30032;
+  }
+
+  .SignIn {
+    height: 50px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 25px;
+      display: block;
+      margin-right: 20px;
+    }
+
+    p {
+      color: #d3d3d3;
+      font-size: 1.2em;
+      flex-grow: 1;
+
+      span {
+        color: #7a7a7a;
+        font-size: 0.8em;
+      }
+    }
+  }
+}

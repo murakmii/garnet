@@ -1,0 +1,154 @@
+.Component {
+  color: #e6e6e6;
+  padding: 30px 35px;
+  background-color: #27282c;
+  border-radius: 6px;
+
+  &.Note {
+    width: 400px;
+    margin: 0 auto;
+  }
+
+  &.Setting {
+    width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.Markdown {
+  color: #e6e6e6;
+  font-size: 0.95em;
+
+  h1 { font-size: 1.5em; }
+  h2 { font-size: 1.4em; }
+  h3 { font-size: 1.3em; }
+  h4 { font-size: 1.2em; }
+  h5 { font-size: 1.1em; }
+  h6 { font-size: 1.1em; }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0;
+  }
+
+  p {
+    line-height: 1.5;
+  }
+
+  > p {
+    margin: 10px 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: #e23838;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  b, strong {
+    color: #e23838;
+  }
+
+  ul, ol {
+    padding-left: 15px;
+    margin: 10px 0;
+  }
+
+  ul:last-child, ol:last-child {
+    margin-bottom: 0;
+  }
+
+  li::marker {
+    color: #acacac;
+  }
+
+  pre {
+    padding: 3px 4px;
+    border-radius: 3px;
+    background-color: #323232;
+    margin: 10px 0;
+  }
+
+  pre:last-child {
+    margin-bottom: 0;
+  }
+
+  :not(pre) code {
+    padding: 2px 4px;
+    margin: 0 2px;
+    border-radius: 3px;
+    background-color: #323232;
+  }
+
+  blockquote {
+    color: #858585;
+    background-color: #323232;
+    border-left: solid 3px #4b4b4b;
+    padding: 8px;
+  }
+
+  > blockquote {
+    margin: 10px 0;
+  }
+
+  blockquote:last-child {
+    margin-bottom: 0;
+  }
+
+  img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+  }
+}
+
+.DialogBackground {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Paragraph {
+  a {
+    color: #e23838;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .Images {
+    display: block;
+  }
+
+  .Image {
+    width: 100px;
+    height: 75px;
+    margin: 10px 10px 0 0;
+    background-size: cover;
+    background-color: #2f3037;
+    display: inline-block;
+  }
+}
+
+.ErrorHeader {
+  color: #b30032;
+  font-size: 3em;
+  width: 100%;
+  padding-top: 100px;
+  text-align: center;
+}

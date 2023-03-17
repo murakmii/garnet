@@ -1,0 +1,29 @@
+#RelaySetting {
+  color: #d3d3d3;
+
+  table {
+    width: 100%;
+
+    th {
+      font-size: 1.2em;
+      color: #e23838;
+      border-bottom: solid 1px rgb(68, 68, 68);
+    }
+
+    td {
+      border-bottom: solid 1px rgb(68, 68, 68);
+    }
+
+    th, td {
+      padding: 6px 0;
+    }
+
+    .RelayURL {
+      text-align: left;
+    }
+
+    .Permission {
+      text-align: center;
+    }
+  }
+}
