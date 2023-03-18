@@ -25,12 +25,13 @@ export const usePinChannelLastMessageTimestamps = () => {
 
     const unPin = Object.keys(timestamps).filter(id => !filters[0]['#e'].indexOf(id));
     if (unPin.length > 0) {
-      const newTimestamps = { ...timestamps };
-      for (const id of unPin) {
-        delete newTimestamps[id];
-      }
-
-      setTimestamps(newTimestamps);
+      setTimestamps(previous => {
+        const newTimestamps = { ...previous };
+        for (const id of unPin) {
+          delete newTimestamps[id];
+        }
+        return newTimestamps;
+      });
     }
 
     let unSub = false;
@@ -52,7 +53,7 @@ export const usePinChannelLastMessageTimestamps = () => {
             }
 
             if (!timestamps[tag[1]] || timestamps[tag[1]] < e.received.event.created_at) {
-              setTimestamps({ ...timestamps, [tag[1]]: e.received.event.created_at });
+              setTimestamps(previous => ({ ...previous, [tag[1]]: e.received.event.created_at }));
             }
           },
           onRecovered: () => {
