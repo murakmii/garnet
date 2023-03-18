@@ -7,7 +7,7 @@ import { Button } from '../common/form';
 import './basic.scss';
 
 export const BasicSetting = () => {
-  const { app, signOut } = useApp();
+  const { app, signOut, enableAmbientTimeline } = useApp();
   const profile = useProfile(app.pubkey);
 
   const doSignOut = () => {
@@ -29,6 +29,20 @@ export const BasicSetting = () => {
             <Button onClick={doSignOut}>SIGN OUT</Button>
           </>
         )}
+      </div>
+
+      <h3>UI設定</h3>
+      <div className="UI">
+        <div className="Row">
+          <input type="checkbox" 
+            id="EnableAmbientTimeline" 
+            onChange={(e) => enableAmbientTimeline(e.target.checked)}
+            checked={app.config.enableAmbientTimeline} />
+          <label htmlFor="EnableAmbientTimeline">アンビエントタイムラインを表示する</label>
+        </div>
+        <p className="Description">
+          アンビエントタイムラインとは、チャンネルのメッセージ一覧右下に小さく表示されるタイムラインです。
+        </p>
       </div>
     </div>
   );

@@ -229,7 +229,8 @@ export const ChannelView = () => {
           <div className="Messages" onScroll={onScrollMessages} ref={messagesRef}>
             {messages.map(m => <Message key={m.id} message={m} />)}
           </div>
-          <AmbientTimeline />
+
+          {app.config.enableAmbientTimeline && <AmbientTimeline />}
 
           <Form channel={state.channel} />
         </div>

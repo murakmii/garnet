@@ -13,10 +13,13 @@ export type AppContext = {
   pinChannel: (channel: string, lastRead: number) => void;
   unPinChannel: (channel: string) => void;
   readChatMessage: (channel: string, timestamp: number) => void;
+
+  enableAmbientTimeline: (enable: boolean) => void;
 };
 
 export type Config = {
   pinChannels: { id: string, lastRead: number }[];
+  enableAmbientTimeline: boolean;
 }
 
 type AppState = {
@@ -24,13 +27,19 @@ type AppState = {
   config: Config;
 };
 
-type AppStateAction = SignInAction | SignOutAction | PinChannelAction | UnPinChannelAction | ReadChatMessage;
+type AppStateAction = SignInAction 
+  | SignOutAction 
+  | PinChannelAction 
+  | UnPinChannelAction 
+  | ReadChatMessage
+  | EnableAmbientTimelineAction
 
 type SignInAction = { type: 'SIGN_IN', pubkey: string };
 type SignOutAction = { type: 'SIGN_OUT' };
 type PinChannelAction = { type: 'PIN_CHANNEL', channel: string, lastRead: number };
 type UnPinChannelAction = { type: 'UNPIN_CHANNEL', channel: string };
 type ReadChatMessage = { type: 'READ_CHAT_MESSAGE', channel: string, timestamp: number };
+type EnableAmbientTimelineAction = { type: 'ENABLE_AMBIENT_TIMELINE', enable: boolean };
 
 const pubkeyConfig = 'garnet.pubkey';
 const configKey = 'garnet.config';
@@ -82,7 +91,7 @@ if (pubkey) {
 }
 
 const App = React.createContext<AppContext>({
-  app: { pubkey, config: { pinChannels: [] } },
+  app: { pubkey, config: { pinChannels: [], enableAmbientTimeline: true } },
 
   mux,
   autoProfileSub,
@@ -93,6 +102,7 @@ const App = React.createContext<AppContext>({
   pinChannel: () => {},
   unPinChannel: () => {},
   readChatMessage: () => {},
+  enableAmbientTimeline: () => {},
 });
 
 const reducer = (state: AppState, action: AppStateAction): AppState => {
@@ -116,7 +126,7 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
     
     case 'SIGN_OUT':
       if (state.pubkey) {
-        state = { pubkey: undefined, config: { pinChannels: [] } };
+        state = { pubkey: undefined, config: { pinChannels: [], enableAmbientTimeline: true } };
         
         if (personalizer) {
           mux.uninstallPlugin(personalizer.id());
@@ -151,6 +161,12 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
         }
       }
       break;
+
+    case 'ENABLE_AMBIENT_TIMELINE':
+      state = { ...state };
+      state.config = { ...state.config, enableAmbientTimeline: action.enable };
+      localStorage.setItem(configKey, JSON.stringify(state.config));
+      break;
   }
 
   return state;
@@ -161,15 +177,15 @@ const parseConfig = (): Config => {
   try {
     mayBeConfig = JSON.parse(localStorage.getItem(configKey) || '{}');
   } catch {
-    return { pinChannels: [] };
+    return { pinChannels: [], enableAmbientTimeline: true };
   }
 
   if (mayBeConfig === null || Array.isArray(mayBeConfig) || typeof mayBeConfig !== 'object') {
-    return { pinChannels: [] };
+    return { pinChannels: [], enableAmbientTimeline: true };
   }
 
-  const config: Config = { pinChannels: [] };
-  const { pinChannels } = mayBeConfig;
+  const config: Config = { pinChannels: [], enableAmbientTimeline: true };
+  const { pinChannels, enableAmbientTimeline } = mayBeConfig;
 
   if (Array.isArray(pinChannels)) {
     for (const ch of pinChannels) {
@@ -184,17 +200,22 @@ const parseConfig = (): Config => {
     }
   }
 
+  if (typeof enableAmbientTimeline== 'boolean') {
+    config.enableAmbientTimeline = enableAmbientTimeline;
+  }
+
   return config;
 };
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, { pubkey, config: pubkey ? parseConfig() : { pinChannels: [] } });
+  const [state, dispatch] = useReducer(reducer, { pubkey, config: pubkey ? parseConfig() : { pinChannels: [], enableAmbientTimeline: true } });
 
   const signIn = (pubkey: string) => dispatch({ type: 'SIGN_IN', pubkey });
   const signOut = () => dispatch({ type: 'SIGN_OUT' });
   const pinChannel = (channel: string, lastRead: number) => dispatch({ type: 'PIN_CHANNEL', channel, lastRead });
   const unPinChannel = (channel: string) => dispatch({ type: 'UNPIN_CHANNEL', channel });
   const readChatMessage = (channel: string, timestamp: number) => dispatch({ type: 'READ_CHAT_MESSAGE', channel, timestamp });
+  const enableAmbientTimeline = (enable: boolean) => dispatch({ type: 'ENABLE_AMBIENT_TIMELINE', enable });
 
   const ctx = {
     app: state,
@@ -208,6 +229,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     pinChannel,
     unPinChannel,
     readChatMessage,
+    enableAmbientTimeline,
   }
 
   return (
