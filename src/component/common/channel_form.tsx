@@ -6,9 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import './channel_form.scss';
 import { Button, TextArea } from './form';
 import { useApp } from '../../state/app';
-import { Event } from 'nostr-mux';
+import { Event, Tag } from 'nostr-mux';
 import { Channel } from '../../state/channels';
-
+import { ChannelMetadata } from '../../lib/nostr';
+import { useChannelMetadata } from '../../state/channel_metadata';
+import { channelMetadataRTagPrefix } from '../../const';
 
 export type ChannelFormProps = {
   title: string;
@@ -22,10 +24,16 @@ type Values = {
   picture: string;
 };
 
-const buildEventForCreation = (content: string): Promise<Event> => {
+type ValidatedValues = {
+  name: string;
+  about?: string;
+  picture?: string;
+};
+
+const buildEventForCreation = (values: ValidatedValues): Promise<Event> => {
   const event = {
     kind: 40,
-    content,
+    content: JSON.stringify(values),
     tags: [],
     created_at: Math.floor(Date.now() / 1000),
   };
@@ -33,13 +41,31 @@ const buildEventForCreation = (content: string): Promise<Event> => {
   return window.nostr.signEvent(event);
 }
 
-const buildEventForUpdate = (channel: Channel, content: string): Promise<Event> => {
+const buildEventForUpdate = (channel: Channel, values: ValidatedValues, metadata: ChannelMetadata[]): Promise<Event> => {
+  metadata = Object.values(metadata.reduce((obj, meta) => {
+    obj[meta.id] = meta;
+    return obj;
+  }, {} as { [K: string]: ChannelMetadata }));
+
+  const channels: { id: string, name?: string, about?: string, picture?: string }[] = [{ ...values, id: channel.metadata.id }];
+  const tags: Tag[] = [
+    ['e', channel.metadata.id, channel.relayURL],
+    ['r', channelMetadataRTagPrefix + channel.metadata.id],
+  ];
+
+  for (const meta of metadata) {
+    if (meta.id === channel.metadata.id) {
+      continue;
+    }
+
+    channels.push({ id: meta.id, name: meta.name || '', about: meta.about, picture: meta.picture })
+    tags.push(['r', channelMetadataRTagPrefix + meta.id]);
+  }
+
   const event = {
     kind: 41,
-    content,
-    tags: [
-      ['e', channel.metadata.id, channel.relayURL]
-    ],
+    content:  JSON.stringify({ ...values, channels }),
+    tags: tags,
     created_at: Math.floor(Date.now() / 1000),
   }
 
@@ -50,6 +76,7 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
   const { mux } = useApp();
   const nav = useNavigate();
   const [saving, setSaving] = useState(false);
+  const metadata = useChannelMetadata(!!channel);
   const [done, setDone] = useState<string | undefined>();
   const [valid, setValid] = useState(false);
   const [values, setValues] = useState<Values>({ 
@@ -97,7 +124,7 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
           return;
         }
 
-        const content: { name: string, about?: string, picture?: string } = { name: values.name };
+        const content: ValidatedValues = { name: values.name };
         if (values.about.length > 0) {
           content.about = values.about;
         }
@@ -106,9 +133,7 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
           content.picture = values.picture;
         }
 
-        const contentJson = JSON.stringify(content);
-
-        (channel ? buildEventForUpdate(channel, contentJson) : buildEventForCreation(contentJson))
+        (channel ? buildEventForUpdate(channel, content, metadata) : buildEventForCreation(content))
           .then(event => {
             if (channel && channel.metadata.creator !== event.pubkey) {
               toast.warn('サインイン状態が不正なためチャンネルを更新できません');

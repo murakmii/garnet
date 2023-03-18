@@ -55,6 +55,8 @@ export const allRouteEntries: RouteEntry[] = helpRouteEntries.concat(settingsRou
 
 export const eventIDPattern = /^[0-9abcdef]{64}$/;
 
+export const channelMetadataRTagPrefix = 'https://garnet.nostrian.net/channels/';
+
 export const welcomeMessage = `
 **GARNET**へようこそ！
 

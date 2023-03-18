@@ -4,7 +4,7 @@ import { EventMessage, Filter, RelayMessageEvent } from 'nostr-mux';
 import { parseChannelMetadata, ChannelMetadata, isNewerChannelMetadata } from '../lib/nostr';
 import { Channel } from "./channels";
 import { useApp } from "./app";
-import { eventIDPattern } from "../const";
+import { channelMetadataRTagPrefix, eventIDPattern } from "../const";
 
 export type ChannelMessage = {
   id: string;
@@ -44,13 +44,18 @@ const reducer = (state: ChannelState, action: ChannelStateAction): ChannelState 
         case 40:
         case 41:
           const metadata = parseChannelMetadata(event);
-          if (!metadata) {
+          if (metadata.length === 0) {
             break;
           }
 
           if (event.kind === 40) {
             if (!state.channel) {
-              const channel = { metadata, createdAt: event.created_at, relayURL: action.message.relay.url };
+              const meta = metadata[0];
+              if (!meta) {
+                break;
+              }
+
+              const channel: Channel = { metadata: meta, createdAt: event.created_at, relayURL: action.message.relay.url };
               for (const t of state.temporary) {
                 if (isNewerChannelMetadata(channel.metadata, t)) {
                   channel.metadata = t;
@@ -59,13 +64,21 @@ const reducer = (state: ChannelState, action: ChannelStateAction): ChannelState 
               state = { ...state, channel: channel, temporary: [] };
             }
           } else {
-            if (state.channel) {
-              if (isNewerChannelMetadata(state.channel.metadata, metadata)) {
-                state.channel.metadata = metadata;
-                state = { ...state };
+            const ch = state.channel;
+            if (ch) {
+              const meta = metadata.find(m => m.id === ch.metadata.id);
+              if (!meta) {
+                break;
+              }
+
+              if (isNewerChannelMetadata(ch.metadata, meta)) {
+                ch.metadata = meta;
+                state = { ...state, channel: ch };
               }
             } else {
-              state.temporary.push(metadata);
+              for (const meta of metadata) {
+                state.temporary.push(meta);
+              }
             }
           }
           break;
@@ -108,13 +121,21 @@ const buildFullFilter = (channelID: string): [Filter, ...Filter[]] => {
       kinds: [40],
     },
     {
-      kinds: [41, 42],
+      kinds: [41],
+      '#r': [channelMetadataRTagPrefix + channelID],
+    },
+    {
+      kinds: [41],
+      '#e': [channelID],
+    },
+    {
+      kinds: [42],
       '#e': [channelID],
       until: now,
       limit: 100,
     },
     {
-      kinds: [41, 42],
+      kinds: [42],
       '#e': [channelID],
       since: now,
     }

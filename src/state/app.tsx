@@ -1,12 +1,12 @@
 import React, { ReactNode, useReducer, useContext } from "react";
-import { Mux, Relay, LogLevel, AutoRelayList, AutoProfileSubscriber, GenericProfile, parseGenericProfile } from 'nostr-mux';
+import { Mux, Relay, LogLevel, Personalizer, AutoProfileSubscriber, GenericProfile, parseGenericProfile } from 'nostr-mux';
 
 export type AppContext = {
   app: AppState;
 
   mux: Mux;
   autoProfileSub: AutoProfileSubscriber<GenericProfile>;
-  autoRelayList: AutoRelayList;
+  personalizer?: Personalizer;
 
   signIn: (pubkey: string) => void;
   signOut: () => void;
@@ -47,18 +47,10 @@ const defaultRelays = [
 const mux = new Mux();
 for (const relayURL of defaultRelays) {
   mux.addRelay(new Relay(relayURL, { 
-    logger: LogLevel.info, 
+    logger: LogLevel.debug, 
     watchDogInterval: 300 * 1000
   }));
 }
-
-const autoRelayList = new AutoRelayList({ 
-  pubkey,
-  logger: LogLevel.info,
-  relayOptionsTemplate: { 
-    watchDogInterval: 300 * 1000
-  }
-});
 
 const autoProfileSub = new AutoProfileSubscriber<GenericProfile>({
   parser: parseGenericProfile,
@@ -69,15 +61,32 @@ const autoProfileSub = new AutoProfileSubscriber<GenericProfile>({
   tickInterval: 1000,
 });
 
-mux.installPlugin(autoRelayList);
 mux.installPlugin(autoProfileSub);
+
+let personalizer: Personalizer | undefined = undefined;
+const installPersonalizer = (p: string) => {
+  personalizer = new Personalizer(
+    p, {
+      logger: LogLevel.debug,
+      flushInterval: 2000,
+      contactList: { enable: true },
+      relayList: { enable: true },
+      cacheReplaceableEvent: [41],
+    }
+  )
+  mux.installPlugin(personalizer);
+}
+
+if (pubkey) {
+  installPersonalizer(pubkey);
+}
 
 const App = React.createContext<AppContext>({
   app: { pubkey, config: { pinChannels: [] } },
 
   mux,
   autoProfileSub,
-  autoRelayList,
+  personalizer,
 
   signIn: () => {}, 
   signOut: () => {},
@@ -95,7 +104,12 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
     case 'SIGN_IN':
       if (state.pubkey !== action.pubkey) {
         state = { pubkey: action.pubkey, config: parseConfig() };
-        autoRelayList.updatePubkey(action.pubkey);
+
+        if (personalizer) {
+          mux.uninstallPlugin(personalizer.id());
+        }
+        installPersonalizer(action.pubkey);
+
         localStorage.setItem(pubkeyConfig, action.pubkey);
       }
       break;
@@ -103,7 +117,11 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
     case 'SIGN_OUT':
       if (state.pubkey) {
         state = { pubkey: undefined, config: { pinChannels: [] } };
-        autoRelayList.updatePubkey(null);
+        
+        if (personalizer) {
+          mux.uninstallPlugin(personalizer.id());
+        }
+
         localStorage.removeItem(pubkeyConfig);
       }
       break;
@@ -183,7 +201,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     mux,
     autoProfileSub,
-    autoRelayList,
+    personalizer,
 
     signIn,
     signOut,

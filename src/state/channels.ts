@@ -26,25 +26,26 @@ const reducer = (state: ChannelsState, action: ChannelsStateStateAction): Channe
     case 'RECEIVED_EVENT':
       const event = action.message.received.event;
       const metadata = parseChannelMetadata(event);
-      if (!metadata) {
+      if (metadata.length === 0) {
         break;
       }
 
       if (event.kind === 40) {
-        // 新規のチャンネルを受信した場合、
-        // 受信済みの新しいメタデータを反映した上で状態に反映する
-        if (state.list[metadata.id]) {
+        const meta = metadata[0];
+        if (state.list[meta.id]) {
           break;
         }
 
-        const ch: Channel = { metadata, relayURL: action.message.relay.url, createdAt: metadata.createdAt };
-        if (state.temporary[metadata.id]) {
-          for (const t of state.temporary[metadata.id]) {
+        // 新規のチャンネルを受信した場合、
+        // 受信済みの新しいメタデータを反映した上で状態に反映する
+        const ch: Channel = { metadata: meta, relayURL: action.message.relay.url, createdAt: meta.createdAt };
+        if (state.temporary[meta.id]) {
+          for (const t of state.temporary[meta.id]) {
             if (isNewerChannelMetadata(ch.metadata, t)) {
               ch.metadata = t;
             }
           }
-          delete state.temporary[metadata.id];
+          delete state.temporary[meta.id];
         }
 
         state = { ...state };
@@ -53,17 +54,19 @@ const reducer = (state: ChannelsState, action: ChannelsStateStateAction): Channe
       } else {
         // メタデータの場合、チャンネルが分かっているなら新旧判定の上で更新、
         // チャンネルが分かっていない場合は一時的に保持し状態の更新は行わない。
-        const ch = state.list[metadata.id];
-        if (ch) {
-          if (isNewerChannelMetadata(ch.metadata, metadata)) {
-            state = { ...state };
-            state.list[metadata.id] = { ...ch, metadata };
+        for (const meta of metadata) {
+          const ch = state.list[meta.id];
+          if (ch) {
+            if (isNewerChannelMetadata(ch.metadata, meta)) {
+              state = { ...state };
+              state.list[meta.id] = { ...ch, metadata: meta };
+            }
+          } else {
+            if (!state.temporary[meta.id]) {
+              state.temporary[meta.id] = [];
+            }
+            state.temporary[meta.id].push(meta);
           }
-        } else {
-          if (!state.temporary[metadata.id]) {
-            state.temporary[metadata.id] = [];
-          }
-          state.temporary[metadata.id].push(metadata);
         }
       }
       break;
