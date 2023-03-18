@@ -8,6 +8,7 @@ import './app.scss';
 import { ChannelList } from './chat/channel_list';
 import { AppProvider, useApp } from '../state/app';
 import { useChannels } from '../state/channels';
+import { FolloweeContextPvovider } from '../state/followee';
 import { usePinChannelLastMessageTimestamps } from '../state/pin_channel_last_message_timestamps';
 import { PageHeader } from './common/page_header';
 import { HelpMenu, SettingsMenu } from './common/simple_page';
@@ -83,7 +84,9 @@ export const App = () => {
         <Sidebar />
 
         <div id="Main">
-          <Outlet />
+          <FolloweeContextPvovider>
+            <Outlet />
+          </FolloweeContextPvovider>
         </div>
       </div>
     </AppProvider>

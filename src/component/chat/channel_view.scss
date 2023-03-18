@@ -30,6 +30,7 @@ $inputMessageHeight: 130px;
     .Center {
       width: calc(100% - 250px);
       height: 100%;
+      position: relative;
     }
   }
 
@@ -75,6 +76,7 @@ $inputMessageHeight: 130px;
       .Content {
         color: #e6e6e6;
         font-size: 0.95em;
+        line-height: 1.9;
         
         background-color: #27282c;
         padding: 6px 10px;
@@ -95,16 +97,6 @@ $inputMessageHeight: 130px;
           margin-top: 6px;
         }
       }
-    }
-  } 
-
-  @keyframes onAddedElement {
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
     }
   }
 

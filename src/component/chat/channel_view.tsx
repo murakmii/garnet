@@ -17,6 +17,7 @@ import { useResizing } from '../../state/resizing';
 import { ChannelForm } from '../common/channel_form';
 import { DialogBackground, ErrorHeader, Markdown, Paragraph } from '../common/parts';
 import { PageHeaderClickableIcon } from '../common/page_header';
+import { AmbientTimeline } from './ambient_timeline';
 
 const emptyMatcher = /^\s*$/;
 
@@ -228,6 +229,7 @@ export const ChannelView = () => {
           <div className="Messages" onScroll={onScrollMessages} ref={messagesRef}>
             {messages.map(m => <Message key={m.id} message={m} />)}
           </div>
+          <AmbientTimeline />
 
           <Form channel={state.channel} />
         </div>

@@ -1,0 +1,63 @@
+@use '../shared.scss';
+@use 'sass:math';
+
+$ambWidth: 250px;
+$ambHeight: 500px;
+$ambIconSize: 24px;
+
+#AmbientTimeline {
+  width: $ambWidth;
+  height: $ambHeight;
+  right: 20px;
+  bottom: 130px;
+  position: absolute;
+  overflow: hidden;
+  z-index: shared.$ambientTimelineZIndex;
+  background-color: rgb(37 29 29 / 59%);
+  backdrop-filter: blur(3px);
+  border-radius: 4px 4px 0 0;
+
+  transition-property: opacity;
+  transition-duration: .2s;
+
+  &:hover {
+    opacity: .15;
+  }
+
+  .Notes {
+    width: 100%;
+    height: $ambHeight;
+    overflow: hidden;
+
+    .Note {
+      width: 100%;
+      min-height: $ambIconSize;
+      margin: 10px 0;
+      padding: 0 10px;
+      box-sizing: border-box;
+      display: flex;
+
+      animation-name: onAddedElement;
+      animation-duration: 0.5s;
+  
+      .Icon {
+        width: $ambIconSize;
+  
+        img {
+          width: $ambIconSize;
+          height: $ambIconSize;
+          border-radius: math.div($ambIconSize, 2);
+          display: block;
+        }
+      }
+  
+      p {
+        color: #c1c1c1;
+        margin-left: 10px;
+        width: $ambWidth - $ambIconSize - 10px * 2 - 10px;
+        font-size: 0.85em;
+        line-height: 1.6;
+      }
+    }
+  }
+}

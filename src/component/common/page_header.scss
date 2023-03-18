@@ -9,6 +9,8 @@ $profileIconRadius: math.div(shared.$headerHeight - $pageHeaderClickableIconPadd
   background-color: #b22532;
   display: flex;
   align-items: center;
+  position: relative; // 無いとアンビエントタイムラインが上に来る
+  z-index: shared.$headerZIndex;
 
   > h2:first-child {
     padding-left: shared.$headerHeight;
