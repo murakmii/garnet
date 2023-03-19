@@ -230,7 +230,7 @@ export const ChannelView = () => {
             {messages.map(m => <Message key={m.id} message={m} />)}
           </div>
 
-          {app.config.enableAmbientTimeline && <AmbientTimeline />}
+          {app.pubkey && app.config.enableAmbientTimeline && <AmbientTimeline />}
 
           <Form channel={state.channel} />
         </div>

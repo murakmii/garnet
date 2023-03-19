@@ -87,8 +87,10 @@ export const useFollowee = (): FolloweeState => {
       return;
     }
 
-    setFollowee(personalizer.contactListEntries.map(e => e.pubkey).concat(self));
-
+    // ここで自分を追加してしまうと、Contact Listを1度も読み込んでいない状態でも
+    // 自分だけのタイムラインを構成しようとしてしまい微妙なREQをCLOSEとなってしまうためまだ追加しない。
+    // 初めてContact Listを受け取った際(listener内)でのみ自分自身を追加する
+    setFollowee(personalizer.contactListEntries.map(e => e.pubkey));
     
     const listener = (entries: ContactListEntry[]) => {
       setFollowee(entries.map(e => e.pubkey).concat(self)); 
