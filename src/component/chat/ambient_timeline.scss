@@ -2,7 +2,7 @@
 @use 'sass:math';
 
 $ambWidth: 250px;
-$ambHeight: 500px;
+$ambHeight: 550px;
 $ambHeaderHeight: 26px;
 $ambIconSize: 24px;
 
@@ -67,7 +67,7 @@ $ambIconSize: 24px;
       p {
         margin-left: 10px;
         width: $ambWidth - $ambIconSize - 10px * 2 - 10px;
-        font-size: 0.85em;
+        font-size: 0.9em;
         line-height: 1.6;
       }
     }

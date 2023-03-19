@@ -1,0 +1,78 @@
+{
+  "translations": [
+    {
+      "key": "ja",
+      "text": "日本語"
+    },
+    {
+      "key": "en",
+      "text": "英語"
+    },
+    {
+      "key": "hello",
+      "text": "こんにちは！"
+    },
+
+    {
+      "key": "channel_browser_id_placeholder",
+      "text": "探したいチャンネルのIDは？"
+    },
+    {
+      "key": "channel_browser_owner_placeholder",
+      "text": "誰が作ったチャンネル？(\"npub...\")"
+    },
+
+    {
+      "key": "settings_menu_basic",
+      "text": "基本設定"
+    },
+    {
+      "key": "settings_menu_relay",
+      "text": "リレー設定"
+    },
+
+    {
+      "key": "settings_basic_sign_in",
+      "text": "サインイン情報"
+    },
+    {
+      "key": "settings_basic_ui",
+      "text": "UI設定"
+    },
+    {
+      "key": "settings_basic_lang",
+      "text": "言語設定"
+    },
+
+    {
+      "key": "settings_basic_show_amb_label",
+      "text": "アンビエントタイムラインを表示する"
+    },
+    {
+      "key": "settings_basic_show_amb_tip",
+      "text": "アンビエントタイムラインとは、チャンネルのメッセージ一覧右下に小さく表示されるタイムラインです。"
+    },
+
+    {
+      "key": "help_menu_public_chat",
+      "text": "Public Chat機能"
+    },
+    {
+      "key": "help_menu_sign_in",
+      "text": "サインイン"
+    },
+    {
+      "key": "help_menu_garnet",
+      "text": "GARNETについて"
+    },
+
+    {
+      "key": "toast_succeeded_sign_in",
+      "text": "サインインに成功しました！"
+    },
+    {
+      "key": "toast_failed_sign_in_no_nip07",
+      "text": "ブラウザ拡張機能が導入されていないためサインインできません"
+    }
+  ]
+}

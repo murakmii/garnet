@@ -1,6 +1,7 @@
 #BasicSetting {
   h3 {
     color: #b30032;
+    margin-bottom: 10px;
   }
 
   .SignIn {
@@ -24,19 +25,18 @@
 
       span {
         color: #7a7a7a;
-        font-size: 0.8em;
+        font-size: 0.9em;
       }
     }
   }
 
-  .UI {
+  .Category {
     color: #c1c1c1;
-    font-size: 0.9em;
+    margin-bottom: 15px;
+    line-height: 1.8;
+  }
 
-    .Row {
-      margin: 10px 0;
-    }
-
+  .UI {
     .Description {
       color: #7a7a7a;
       font-size: 0.9em;

@@ -13,18 +13,18 @@ export type RouteEntry = {
 export const helpRouteEntries: RouteEntry[] = [
   {
     key: 'publicChat',
-    name: 'Public Chat機能',
+    name: 'help_menu_public_chat',
     link: '/help/chat',
     matchURL: ['/help', '/help/chat'],
   },
   {
     key: 'signin',
-    name: 'サインイン',
+    name: 'help_menu_sign_in',
     link: '/help/signin',
   },
   {
     key: 'garnet',
-    name: 'GARNETについて',
+    name: 'help_menu_garnet',
     link: '/help/garnet',
   }
 ];
@@ -32,13 +32,13 @@ export const helpRouteEntries: RouteEntry[] = [
 export const settingsRouteEntries: RouteEntry[] = [
   {
     key: 'basic',
-    name: '基本設定',
+    name: 'settings_menu_basic',
     link: '/settings/basic',
     matchURL: ['/settings', '/settings/basic'],
   },
   {
     key: 'relay',
-    name: 'リレー設定',
+    name: 'settings_menu_relay',
     link: '/settings/relay',
   }
 ];

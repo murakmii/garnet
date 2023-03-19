@@ -1,0 +1,78 @@
+{
+  "translations": [
+    {
+      "key": "ja",
+      "text": "Japanese"
+    },
+    {
+      "key": "en",
+      "text": "English"
+    },
+    {
+      "key": "hello",
+      "text": "Hello!"
+    },
+
+    {
+      "key": "channel_browser_id_placeholder",
+      "text": "What is the channel ID?"
+    },
+    {
+      "key": "channel_browser_owner_placeholder",
+      "text": "Who is owner of channel?(\"npub...\")"
+    },
+
+    {
+      "key": "settings_menu_basic",
+      "text": "Basic"
+    },
+    {
+      "key": "settings_menu_relay",
+      "text": "Relay"
+    },
+
+    {
+      "key": "settings_basic_sign_in",
+      "text": "Sign in information"
+    },
+    {
+      "key": "settings_basic_ui",
+      "text": "UI setting"
+    },
+    {
+      "key": "settings_basic_lang",
+      "text": "Language setting"
+    },
+
+    {
+      "key": "settings_basic_show_amb_label",
+      "text": "Show Ambient Timeline"
+    },
+    {
+      "key": "settings_basic_show_amb_tip",
+      "text": "\"Ambient Timeline\" that is positioned at right-bottom in channel shows your followee's notes"
+    },
+
+    {
+      "key": "help_menu_public_chat",
+      "text": "Public Chat"
+    },
+    {
+      "key": "help_menu_sign_in",
+      "text": "Sign in"
+    },
+    {
+      "key": "help_menu_garnet",
+      "text": "About GARNET"
+    },
+
+    {
+      "key": "toast_succeeded_sign_in",
+      "text": "Succeeded sign in!"
+    },
+    {
+      "key": "toast_failed_sign_in_no_nip07",
+      "text": "Can't sign in. Browser extension is NOT installed"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ import { DialogBackground, ErrorHeader, Markdown } from '../common/parts';
 import { PageHeaderClickableIcon } from '../common/page_header';
 import { AmbientTimeline } from './ambient_timeline';
 import { ChannelMessageView } from '../common/channel_message_view';
+import { translate } from '../../lib/i18n';
 
 const emptyMatcher = /^\s*$/;
 
@@ -32,12 +33,12 @@ const Form = ({ channel }: { channel?: Channel }) => {
 
   const doSignIn = () => {
     if (!window.nostr?.getPublicKey) {
-      toast.warn('ブラウザ拡張機能が導入されていないためサインインできません');
+      toast.warn(translate(app.config.lang, 'toast_failed_sign_in_no_nip07'));
       return;
     }
 
     window.nostr.getPublicKey().then(pubkey => {
-      toast.success('サインインに成功しました！');
+      toast.success(translate(app.config.lang, 'toast_succeeded_sign_in'));
       signIn(pubkey);
     });
   };
@@ -95,7 +96,7 @@ const Form = ({ channel }: { channel?: Channel }) => {
 
   return (
     <form name="inputMessage" onSubmit={(e: React.FormEvent) => e.preventDefault()}>
-      <TextArea name="content" multiline={true} placeholder="こんにちは！" value={inputContent} onChange={onChange} onSubmitByKey={send} disabled={!signedIn} />
+      <TextArea name="content" multiline={true} placeholder={translate(app.config.lang, "hello")} value={inputContent} onChange={onChange} onSubmitByKey={send} disabled={!signedIn} />
       
       <div className="Buttons">
         <Link to="/help"><MdHelp /></Link>

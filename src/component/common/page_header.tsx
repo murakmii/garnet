@@ -7,6 +7,7 @@ import { useApp } from '../../state/app';
 import { useProfile } from '../../state/profile';
 import { defaultProfile } from '../../const';
 import { toast } from 'react-toastify';
+import { translate } from '../../lib/i18n';
 
 type PageHeaderClickableIconProps = {
   hide?: boolean;
@@ -39,13 +40,13 @@ export const PageHeader = ({ children }: { children?: ReactNode }) => {
 
   const clickSignIn = () => {
     if (!window.nostr?.getPublicKey) {
-      toast.warn('ブラウザ拡張機能が導入されていないためサインインできません');
+      toast.warn(translate(app.config.lang, 'toast_failed_sign_in_no_nip07'));
       return;
     }
 
     window.nostr.getPublicKey().then(pubkey => {
       signIn(pubkey);
-      toast.success('サインインに成功しました！');
+      toast.success(translate(app.config.lang, 'toast_succeeded_sign_in'));
     });
   };
 

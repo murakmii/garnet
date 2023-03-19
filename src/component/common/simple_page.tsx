@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate, useOutlet } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { RouteEntry, helpRouteEntries, settingsRouteEntries, allRouteEntries } from '../../const';
+import { T } from '../../hooks/i18n';
 import { useApp } from '../../state/app';
 import { PageHeader } from './page_header';
 import './simple_page.scss';
@@ -18,7 +19,7 @@ const SimpleMenu = ({ title, entries }: { title: string, entries: RouteEntry[] }
         {entries.map(entry => 
           <li key={entry.key}>
             <Link className={(entry.link === path || (entry.matchURL?.includes(path))) ? 'Selected' : ''} to={entry.link}>
-              {entry.name}
+              <T transKey={entry.name} />
             </Link>
           </li>
         )}
@@ -45,7 +46,7 @@ export const SimplePage = ({ children, requireSignIn }: { children?: ReactNode, 
   return (
     <div id="SimplePage">
       <PageHeader>
-        <h2>{title}</h2>
+        <h2><T transKey={title} /></h2>
       </PageHeader>
 
       <div className="Page">

@@ -11,6 +11,7 @@ import { useChannels } from '../../state/channels';
 import { ChannelForm } from '../common/channel_form';
 import { PageHeaderClickableIcon } from '../common/page_header';
 import { DialogBackground } from '../common/parts';
+import { translate } from '../../lib/i18n';
 
 type SearchFormValues = {
   channelID: string;
@@ -83,9 +84,9 @@ export const ChannelBrowser = () => {
 
         <form name="search" onSubmit={(e) => e.preventDefault()}>
           <h3>CHANNEL ID</h3>
-          <TextArea name="channelID" placeholder="探したいチャンネルのIDは？" value={searchForm.channelID} onChange={onChange} />
+          <TextArea name="channelID" placeholder={translate(app.config.lang, 'channel_browser_id_placeholder')} value={searchForm.channelID} onChange={onChange} />
           <h3>OWNER</h3>
-          <TextArea name="owner" placeholder="誰が作ったチャンネル？(npub...)" value={searchForm.owner} onChange={onChange} />
+          <TextArea name="owner" placeholder={translate(app.config.lang, 'channel_browser_owner_placeholder')} value={searchForm.owner} onChange={onChange} />
 
           <div className="Buttons">
             <Button onClick={doSearch}>SEARCH</Button>
