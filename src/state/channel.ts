@@ -8,6 +8,7 @@ import { channelMetadataRTagPrefix, eventIDPattern } from "../const";
 
 export type ChannelMessage = {
   id: string;
+  channelID: string;
   pubkey: string;
   content: string;
   createdAt: number;
@@ -175,6 +176,7 @@ export const useChannel = (channelID: string): ChannelState => {
               if (e.received.event.kind === 42) {
                 messages.push({
                   id: e.received.event.id,
+                  channelID,
                   pubkey: e.received.event.pubkey,
                   content: e.received.event.content,
                   createdAt: e.received.event.created_at,

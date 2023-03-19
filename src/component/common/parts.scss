@@ -15,6 +15,11 @@
     width: 600px;
     margin: 0 auto;
   }
+
+  &.Setting {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .Markdown {

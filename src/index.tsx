@@ -12,6 +12,16 @@ import { SimplePage } from './component/common/simple_page';
 import { welcomeMessage, publicChatHelp, signInHelp, garnetHelp } from './const';
 import { Component, Markdown } from './component/common/parts';
 import { ProfilePage } from './component/user/profile_page';
+import { useApp } from './state/app';
+import { MessageTimeline } from './component/home/message_timeline';
+
+const Top = () => {
+  return useApp().app.pubkey ? <MessageTimeline /> : (
+    <SimplePage>
+      <Component type="Note"><Markdown trust md={welcomeMessage} /></Component>
+    </SimplePage>
+  );
+};
 
 const router = createBrowserRouter([
   {
@@ -20,11 +30,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: (
-          <SimplePage>
-            <Component type="Note"><Markdown trust md={welcomeMessage} /></Component>
-          </SimplePage>
-        )
+        element: <Top />
       },
       {
         path: 'channels',

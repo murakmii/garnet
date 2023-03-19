@@ -7,7 +7,7 @@ import './parts.scss';
 const linkMatcher = /https?:\/\/[\w!\?/\+\-_~=;\.,\*&@#\$%\(\)'\[\]]+/g;
 const lineBreakMatcher = /\r?\n/;
 
-export type ComponentType = 'Note' | 'Setting';
+export type ComponentType = 'Note' | 'Setting' | 'Max';
 
 export type ComponentProps = {
   id?: string;

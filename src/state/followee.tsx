@@ -1,6 +1,8 @@
 import { ContactListEntry } from "nostr-mux";
 import { useEffect, useState, useReducer, createContext, ReactNode } from "react";
+import { eventIDPattern } from "../const";
 import { useApp } from "./app";
+import { ChannelMessage } from "./channel";
 
 export type SimpleNote = {
   type: 'NOTE';
@@ -10,19 +12,11 @@ export type SimpleNote = {
   createdAt: number;
 };
 
-export type SimpleMessage = {
-  type: 'MESSAGE';
-  id: string;
-  pubkey: string;
-  content: string;
-  createdAt: number;
-};
-
 export type FolloweeState = {
   notes: { [K: string]: SimpleNote };
   sortedNotes: SimpleNote[];
-  messages: { [K: string]: SimpleMessage };
-  sortedMessages: SimpleMessage[];
+  messages: { [K: string]: ChannelMessage };
+  sortedMessages: ChannelMessage[];
 };
 
 const buildInitial = () => ({ notes: {}, sortedNotes: [], messages: {}, sortedMessages: [] });
@@ -35,8 +29,8 @@ type AddSimpleNotesAction = {
 };
 
 type AddSimpleMessagesAction = {
-  type: 'ADD_SIMPLE_MESSAGES';
-  messages: SimpleMessage[];
+  type: 'ADD_MESSAGES';
+  messages: ChannelMessage[];
 };
 
 type SignedOutAction = {
@@ -54,7 +48,7 @@ const reducer = (state: FolloweeState, action: FolloweeStateAction): FolloweeSta
         .sort((a, b) => b.createdAt - a.createdAt).slice(0, 50);
       break;
 
-    case 'ADD_SIMPLE_MESSAGES':
+    case 'ADD_MESSAGES':
       state = { ...state };
       for (const msg of action.messages) {
         state.messages[msg.id] = msg;
@@ -118,7 +112,13 @@ export const useFollowee = (): FolloweeState => {
           limit: 50,
         },
         {
-          kinds: [1],
+          kinds: [42],
+          until: now,
+          authors: followee,
+          limit: 50,
+        },
+        {
+          kinds: [1, 42],
           authors: followee,
           since: now,
         }
@@ -129,18 +129,40 @@ export const useFollowee = (): FolloweeState => {
         }
 
         const notes: SimpleNote[] = [];
+        const messages: ChannelMessage[] = [];
+
         for (const e of events) {
           const event = e.received.event;
-          notes.push({
-            type: 'NOTE',
-            id: event.id,
-            pubkey: event.pubkey,
-            content: event.content,
-            createdAt: event.created_at,
-          });
+          if (event.kind === 1) {
+            notes.push({
+              type: 'NOTE',
+              id: event.id,
+              pubkey: event.pubkey,
+              content: event.content,
+              createdAt: event.created_at,
+            });
+          } else {
+            const root = event.tags.find(t => t[0] === 'e' && eventIDPattern.test(t[1]) && t[3] === 'root');
+            if (!root) {
+              continue;
+            }
+
+            messages.push({
+              id: event.id,
+              channelID: root[1],
+              pubkey: event.pubkey,
+              content: event.content,
+              createdAt: event.created_at,
+            });
+          }
         }
 
-        dispatch({ type: 'ADD_SIMPLE_NOTES', notes });
+        if (notes.length > 0) {
+          dispatch({ type: 'ADD_SIMPLE_NOTES', notes });
+        } 
+        if (messages.length > 0) {
+          dispatch({ type: 'ADD_MESSAGES', messages });
+        }
       },
       enableBuffer: {
         flushInterval: 1000,

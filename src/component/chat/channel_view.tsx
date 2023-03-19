@@ -8,45 +8,19 @@ import { Link } from 'react-router-dom';
 
 import './channel_view.scss';
 import { Channel } from '../../state/channels';
-import { useChannel, ChannelMessage } from '../../state/channel';
+import { useChannel } from '../../state/channel';
 import { Button, TextArea } from '../common/form';
 import { PageHeader } from '../common/page_header';
 import { useApp } from '../../state/app';
 import { useProfile } from '../../state/profile';
 import { useResizing } from '../../state/resizing';
 import { ChannelForm } from '../common/channel_form';
-import { DialogBackground, ErrorHeader, Markdown, Paragraph } from '../common/parts';
+import { DialogBackground, ErrorHeader, Markdown } from '../common/parts';
 import { PageHeaderClickableIcon } from '../common/page_header';
 import { AmbientTimeline } from './ambient_timeline';
+import { ChannelMessageView } from '../common/channel_message_view';
 
 const emptyMatcher = /^\s*$/;
-
-const Message = ({ message }: { message: ChannelMessage }) => {
-  const profile = useProfile(message.pubkey);
-
-  return (
-    <div className="Message">
-      <div className="Icon">
-        {profile && (
-          profile.notFound ? (
-            <img src={profile.iconURL } alt={profile.name} />
-          ) : (
-            <Link to={`/users/${profile.pubkey}`}>
-              <img src={profile.iconURL } alt={profile.name} />
-            </Link>
-          )
-        )}
-      </div>
-      <div className="Content">
-        <p className="UserName">
-          <b>{profile?.name || 'LOADING...'}</b>
-          <i>{new Date(message.createdAt * 1000).toLocaleString()}</i>
-        </p>
-        <Paragraph className="Main">{message.content}</Paragraph>
-      </div>
-    </div>
-  )
-};
 
 const Form = ({ channel }: { channel?: Channel }) => {
   const [inputContent, setInputContent] = useState('');
@@ -227,7 +201,7 @@ export const ChannelView = () => {
       <div className="PageContent">
         <div className="Center">
           <div className="Messages" onScroll={onScrollMessages} ref={messagesRef}>
-            {messages.map(m => <Message key={m.id} message={m} />)}
+            {messages.map(m => <ChannelMessageView key={m.id} message={m} />)}
           </div>
 
           {app.pubkey && app.config.enableAmbientTimeline && <AmbientTimeline />}

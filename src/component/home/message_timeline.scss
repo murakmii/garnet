@@ -1,0 +1,34 @@
+@use '../shared.scss';
+
+#MessageTimeline {
+  width: 100%;
+  height: 100%;
+
+  .PageContent {
+    width: 100%;
+    height: calc(100% - shared.$headerHeight);
+    overflow-y: scroll;
+
+    .Timeline {
+      width: 600px;
+      margin: 0 auto;
+
+      > h3 {
+        color: #e6e6e6;
+        font-size: 1.8em;
+        
+        text-align: center;
+        padding: 40px 0;
+  
+        svg {
+          font-size: 0.9em;
+          padding-left: 5px;
+        }
+      }
+
+      .ChannelMessageView {
+        margin: 10px 0;
+      }
+    }
+  }
+}
