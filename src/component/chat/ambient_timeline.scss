@@ -3,17 +3,21 @@
 
 $ambWidth: 250px;
 $ambHeight: 500px;
+$ambHeaderHeight: 26px;
 $ambIconSize: 24px;
 
 #AmbientTimeline {
+  color: #c1c1c1;
   width: $ambWidth;
-  height: $ambHeight;
+  height: $ambHeight + $ambHeaderHeight;
   right: 20px;
   bottom: 130px;
+  border: solid 1px rgb(49 53 61);
+  border-bottom: none;
   position: absolute;
   overflow: hidden;
   z-index: shared.$ambientTimelineZIndex;
-  background-color: rgb(37 29 29 / 59%);
+  background-color: rgb(47 51 59 / 59%);
   backdrop-filter: blur(3px);
   border-radius: 4px 4px 0 0;
 
@@ -22,6 +26,15 @@ $ambIconSize: 24px;
 
   &:hover {
     opacity: .15;
+  }
+
+  h3 {
+    height: $ambHeaderHeight;
+    line-height: $ambHeaderHeight;
+    font-size: 1em;
+    margin: 0 10px;
+    border-bottom: solid 1px rgb(49 53 61);
+    text-align: center;
   }
 
   .Notes {
@@ -52,7 +65,6 @@ $ambIconSize: 24px;
       }
   
       p {
-        color: #c1c1c1;
         margin-left: 10px;
         width: $ambWidth - $ambIconSize - 10px * 2 - 10px;
         font-size: 0.85em;

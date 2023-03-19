@@ -24,6 +24,7 @@ export const AmbientTimeline = () => {
 
   return (
     <div id="AmbientTimeline">
+      <h3>What are followees now?</h3>
       <div className="Notes">
         {followee.sortedNotes.slice(0, 20).map(n => <Note key={n.id} note={n} />)}
       </div>
