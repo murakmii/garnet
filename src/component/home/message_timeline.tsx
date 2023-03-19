@@ -18,7 +18,7 @@ export const MessageTimeline = () => {
         <div className="Timeline">
           <h3>Followees are chatting on...</h3>
 
-          {followee.sortedMessages.reverse().map(m => (
+          {followee.sortedMessages.map(m => (
             <ChannelMessageView key={m.id} message={m} showChannelLink />
           ))}
 
