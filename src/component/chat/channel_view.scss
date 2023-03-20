@@ -70,10 +70,6 @@ $inputMessageHeight: 130px;
       display: flex;
       align-items: center;
 
-      > * {
-        display: block;
-      }
-
       .Space {
         flex-grow: 1;
       }
@@ -82,6 +78,7 @@ $inputMessageHeight: 130px;
         color: white;
         width: 24px;
         height: 24px;
+        display: block;
   
         svg {
           width: 100%;
@@ -95,13 +92,14 @@ $inputMessageHeight: 130px;
       }
 
       .CheckBox {
-        margin-right: 20px;
+        margin-right: 15px;
       }
 
       .Button {
         width: 60px;
         height: 30px;
         font-size: 1.3em;
+        display: block;
       }
     }
 

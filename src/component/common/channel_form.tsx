@@ -10,7 +10,7 @@ import { Event, Tag } from 'nostr-mux';
 import { Channel } from '../../state/channels';
 import { ChannelMetadata } from '../../lib/nostr';
 import { useChannelMetadata } from '../../state/channel_metadata';
-import { channelMetadataRTagPrefix } from '../../const';
+import { channelURLPrefix } from '../../const';
 
 export type ChannelFormProps = {
   title: string;
@@ -50,7 +50,7 @@ const buildEventForUpdate = (channel: Channel, values: ValidatedValues, metadata
   const channels: { id: string, name?: string, about?: string, picture?: string }[] = [{ ...values, id: channel.metadata.id }];
   const tags: Tag[] = [
     ['e', channel.metadata.id, channel.relayURL],
-    ['r', channelMetadataRTagPrefix + channel.metadata.id],
+    ['r', channelURLPrefix + channel.metadata.id],
   ];
 
   for (const meta of metadata) {
@@ -59,7 +59,7 @@ const buildEventForUpdate = (channel: Channel, values: ValidatedValues, metadata
     }
 
     channels.push({ id: meta.id, name: meta.name || '', about: meta.about, picture: meta.picture })
-    tags.push(['r', channelMetadataRTagPrefix + meta.id]);
+    tags.push(['r', channelURLPrefix + meta.id]);
   }
 
   const event = {

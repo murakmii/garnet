@@ -66,4 +66,17 @@
       }
     }
   }
+
+  .Mark {
+    font-size: 1.3em;
+    color: white;
+    margin-left: 5px;
+    display: none;
+  }
+
+  &.Note {
+    .Mark {
+      display: block;
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaExternalLinkSquareAlt } from 'react-icons/fa';
+import { GiNotebook } from 'react-icons/gi';
 
 import './channel_message_view.scss';
 import { ChannelMessage } from '../../state/channel';
@@ -15,7 +16,7 @@ export const ChannelMessageView = ({ message, showChannelLink }: ChannelMessageV
   const profile = useProfile(message.pubkey);
 
   return (
-    <div className="ChannelMessageView">
+    <div className={'ChannelMessageView ' + (message.isNote ? 'Note' : '')}>
       <div className="Icon">
         {profile && (
           profile.notFound ? (
@@ -27,6 +28,7 @@ export const ChannelMessageView = ({ message, showChannelLink }: ChannelMessageV
           )
         )}
       </div>
+
       <div className="Body">
         <div className="Content">
           <p className="UserName">
@@ -37,6 +39,10 @@ export const ChannelMessageView = ({ message, showChannelLink }: ChannelMessageV
           <Paragraph className="Main">{message.content}</Paragraph>
         </div>
       </div>
+
+      {message.isNote && (
+        <GiNotebook className="Mark" />
+      )}
     </div>
   )
 };

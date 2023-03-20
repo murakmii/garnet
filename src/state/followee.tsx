@@ -149,6 +149,7 @@ export const useFollowee = (): FolloweeState => {
 
             messages.push({
               id: event.id,
+              isNote: false,
               channelID: root[1],
               pubkey: event.pubkey,
               content: event.content,

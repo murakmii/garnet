@@ -78,16 +78,16 @@ export const TextArea = ({ name, value, placeholder, multiline, disabled, onChan
 
 export type CheckBoxProps = {
   name: string;
-  label: string;
   checked: boolean;
+  children?: ReactNode;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const CheckBox = ({ name, label, onChange, checked }: CheckBoxProps) => {
+export const CheckBox = ({ name, onChange, checked, children }: CheckBoxProps) => {
   return (
-    <div className="CheckBox">
+    <label className="CheckBox" htmlFor={`CheckBox-${name}`}>
       <input type="checkbox" name={name} id={`CheckBox-${name}`} onChange={onChange} checked={checked} />
-      <label htmlFor={`CheckBox-${name}`}>{label}</label>
-    </div>
+      {children}
+    </label>
   );
 };

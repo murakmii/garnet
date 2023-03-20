@@ -71,13 +71,19 @@ textarea.TextArea {
 }
 
 .CheckBox {
+  color: #d3d3d3;
+
   input {
     accent-color: #e23838;
     vertical-align: middle;
+    position: relative;
+    bottom: 1px;
   }
 
-  label {
-    color: #d3d3d3;
-    padding-left: 5px;
+  svg {
+    font-size: 1.2em;
+    vertical-align: middle;
+    position: relative;
+    bottom: 1px;
   }
 }

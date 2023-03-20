@@ -4,10 +4,11 @@ import { EventMessage, Filter, RelayMessageEvent } from 'nostr-mux';
 import { parseChannelMetadata, ChannelMetadata, isNewerChannelMetadata } from '../lib/nostr';
 import { Channel } from "./channels";
 import { useApp } from "./app";
-import { channelMetadataRTagPrefix, eventIDPattern } from "../const";
+import { channelURLPrefix, eventIDPattern } from "../const";
 
 export type ChannelMessage = {
   id: string;
+  isNote: boolean;
   channelID: string;
   pubkey: string;
   content: string;
@@ -123,7 +124,7 @@ const buildFullFilter = (channelID: string): [Filter, ...Filter[]] => {
     },
     {
       kinds: [41],
-      '#r': [channelMetadataRTagPrefix + channelID],
+      '#r': [channelURLPrefix + channelID],
     },
     {
       kinds: [41],
@@ -138,6 +139,17 @@ const buildFullFilter = (channelID: string): [Filter, ...Filter[]] => {
     {
       kinds: [42],
       '#e': [channelID],
+      since: now,
+    },
+    {
+      kinds: [1],
+      '#r': [channelURLPrefix + channelID],
+      until: now,
+      limit: 100,
+    },
+    {
+      kinds: [1],
+      '#r': [channelURLPrefix + channelID],
       since: now,
     }
   ];
@@ -173,9 +185,11 @@ export const useChannel = (channelID: string): ChannelState => {
           onEvent: events => {
             const messages: ChannelMessage[] = [];
             for (const e of events) {
-              if (e.received.event.kind === 42) {
+              if (e.received.event.kind === 1 || e.received.event.kind === 42) {
+                console.log('receive kind 1', e);
                 messages.push({
                   id: e.received.event.id,
+                  isNote: e.received.event.kind === 1,
                   channelID,
                   pubkey: e.received.event.pubkey,
                   content: e.received.event.content,

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { BsPinAngleFill, BsPinAngle, BsSendFill } from 'react-icons/bs';
+import { AiFillExperiment } from 'react-icons/ai';
 import { FaEdit, FaCopy } from 'react-icons/fa';
 import { MdHelp } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -20,7 +21,7 @@ import { PageHeaderClickableIcon } from '../common/page_header';
 import { AmbientTimeline } from './ambient_timeline';
 import { ChannelMessageView } from '../common/channel_message_view';
 import { translate } from '../../lib/i18n';
-import { channelMetadataRTagPrefix } from '../../const';
+import { channelURLPrefix } from '../../const';
 
 const emptyMatcher = /^\s*$/;
 
@@ -68,15 +69,20 @@ const Form = ({ channel }: { channel?: Channel }) => {
     }
 
     const event = {
-      kind: 42,
+      kind: asNote ? 1 : 42,
       pubkey: app.pubkey,
       content: inputContent,
-      tags: [['e', channel.metadata.id, channel.relayURL, 'root']],
+      tags: [asNote ? (
+        ['r', channelURLPrefix + channel.metadata.id]
+      ) : (
+        ['e', channel.metadata.id, channel.relayURL, 'root']
+      )],
       created_at: Math.floor(Date.now() / 1000),
     };
 
     let acceptedOnce = false;
     setInputContent('');
+    setAsNote(false);
 
     window.nostr.signEvent(event)
       .then(e => {
@@ -107,7 +113,11 @@ const Form = ({ channel }: { channel?: Channel }) => {
         <Link to="/help"><MdHelp /></Link>
         <div className="Space"></div>
       
-        {false && <CheckBox name="asNote" label="As Note" checked={asNote} onChange={e => setAsNote(e.target.checked)} />}
+        <CheckBox name="asNote" checked={asNote} onChange={e => setAsNote(e.target.checked)}>
+          As Note
+          <AiFillExperiment />
+        </CheckBox>
+        
         <Button disabled={!signedIn || emptyMatcher.test(inputContent)} onClick={send}><BsSendFill /></Button>
       </div>
 
