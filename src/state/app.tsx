@@ -74,7 +74,7 @@ const autoProfileSub = new AutoProfileSubscriber<GenericProfile>({
   collectPubkeyFromEvent: (e, relayURL) => {
     return (relayURL && e.kind === 42) ? [e.pubkey] : [];
   },
-  tickInterval: 1000,
+  tickInterval: 1500,
 });
 
 mux.installPlugin(autoProfileSub);
@@ -134,7 +134,7 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
     
     case 'SIGN_OUT':
       if (state.pubkey) {
-        state = { pubkey: undefined, config: { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang } };
+        state = { pubkey: undefined, config: { pinChannels: [], enableAmbientTimeline: true, lang: state.config.lang } }; // 言語は引継ぎ
         
         if (personalizer) {
           mux.uninstallPlugin(personalizer.id());
@@ -214,17 +214,21 @@ const parseConfig = (): Config => {
     }
   }
 
-  if (typeof enableAmbientTimeline== 'boolean') {
+  if (typeof enableAmbientTimeline === 'boolean') {
     config.enableAmbientTimeline = enableAmbientTimeline;
   }
 
-  config.lang = (typeof lang === 'string' && lang === 'ja') ? 'ja' : defaultLang;
+  config.lang = (typeof lang === 'string' && (lang === 'ja' || lang === 'en')) ? lang : defaultLang;
 
   return config;
 };
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, { pubkey, config: pubkey ? parseConfig() : { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang } });
+  const [state, dispatch] = useReducer(reducer, { pubkey, config: pubkey ? parseConfig() : { 
+    pinChannels: [], 
+    enableAmbientTimeline: true, 
+    lang: defaultLang 
+  } });
 
   const signIn = (pubkey: string) => dispatch({ type: 'SIGN_IN', pubkey });
   const signOut = () => dispatch({ type: 'SIGN_OUT' });

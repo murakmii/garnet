@@ -69,3 +69,15 @@
 textarea.TextArea {
   resize: none;
 }
+
+.CheckBox {
+  input {
+    accent-color: #e23838;
+    vertical-align: middle;
+  }
+
+  label {
+    color: #d3d3d3;
+    padding-left: 5px;
+  }
+}

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import './channel_view.scss';
 import { Channel } from '../../state/channels';
 import { useChannel } from '../../state/channel';
-import { Button, TextArea } from '../common/form';
+import { Button, TextArea, CheckBox } from '../common/form';
 import { PageHeader } from '../common/page_header';
 import { useApp } from '../../state/app';
 import { useProfile } from '../../state/profile';
@@ -20,16 +20,21 @@ import { PageHeaderClickableIcon } from '../common/page_header';
 import { AmbientTimeline } from './ambient_timeline';
 import { ChannelMessageView } from '../common/channel_message_view';
 import { translate } from '../../lib/i18n';
+import { channelMetadataRTagPrefix } from '../../const';
 
 const emptyMatcher = /^\s*$/;
 
 const Form = ({ channel }: { channel?: Channel }) => {
   const [inputContent, setInputContent] = useState('');
+  const [asNote, setAsNote] = useState(false);
 
   const { app, mux, signIn } = useApp();
   const signedIn = !!app.pubkey;
 
-  useEffect(() => setInputContent(''), [channel?.metadata.id]);
+  useEffect(() => {
+    setAsNote(false);
+    setInputContent('');
+  }, [channel?.metadata.id]);
 
   const doSignIn = () => {
     if (!window.nostr?.getPublicKey) {
@@ -100,6 +105,9 @@ const Form = ({ channel }: { channel?: Channel }) => {
       
       <div className="Buttons">
         <Link to="/help"><MdHelp /></Link>
+        <div className="Space"></div>
+      
+        {false && <CheckBox name="asNote" label="As Note" checked={asNote} onChange={e => setAsNote(e.target.checked)} />}
         <Button disabled={!signedIn || emptyMatcher.test(inputContent)} onClick={send}><BsSendFill /></Button>
       </div>
 

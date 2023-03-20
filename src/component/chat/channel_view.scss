@@ -68,11 +68,14 @@ $inputMessageHeight: 130px;
     .Buttons {
       width: 100%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
 
       > * {
         display: block;
+      }
+
+      .Space {
+        flex-grow: 1;
       }
 
       a {
@@ -89,6 +92,10 @@ $inputMessageHeight: 130px;
             color: #e23838;
           }
         }
+      }
+
+      .CheckBox {
+        margin-right: 20px;
       }
 
       .Button {

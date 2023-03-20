@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactEventHandler, ReactNode } from 'react';
 
 import './form.scss';
 
@@ -73,5 +73,21 @@ export const TextArea = ({ name, value, placeholder, multiline, disabled, onChan
       value={value}
       placeholder={placeholder}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(name, e.target.value)} />
+  );
+};
+
+export type CheckBoxProps = {
+  name: string;
+  label: string;
+  checked: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+export const CheckBox = ({ name, label, onChange, checked }: CheckBoxProps) => {
+  return (
+    <div className="CheckBox">
+      <input type="checkbox" name={name} id={`CheckBox-${name}`} onChange={onChange} checked={checked} />
+      <label htmlFor={`CheckBox-${name}`}>{label}</label>
+    </div>
   );
 };

@@ -2,8 +2,9 @@ $headerHeight: 38px;
 
 $selectedMenuColor: #b22532;
 
+$sidebarZIndex: 1050;
 $headerZIndex: 1000;
-$dialogBackgroundZIndex: 1100;
+$dialogBackgroundZIndex: 900;
 $ambientTimelineZIndex: 100;
 
 @keyframes onAddedElement {
