@@ -125,82 +125,123 @@ $inputMessageHeight: 130px;
 
   .ChannelMetadata {
     width: 250px;
-    padding: 15px 0;
+    height: 100%;
     background-color: #1d1d1d;
     border-left: solid 1px #0e0e0e;
     box-sizing: border-box;
     overflow: hidden;
 
-    .Banner {
-      width: 250px;
-      height: 150px;
-      margin-bottom: 15px;
-      background-size: cover;
-      background-position: center center;
-    }
+    .Tabs {
+      width: 100%;
+      height: 35px;
+      padding: 0 5px;
+      display: flex;
 
-    .Markdown {
-      margin-bottom: 20px;
-      padding: 0 15px;
-    }
+      .Tab {
+        font-size: 1.1em;
+        width: 50%;
+        height: 35px;
+        line-height: 35px;
+        box-sizing: border-box;
+        text-align: center;
 
-    > h3 {
-      color: #b30032;
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      padding: 0 15px;
-
-      &.About {
-        svg {
-          color: white;
-          float: right;
+        &:not(.Selected) {
+          color: #999;
+          background-color: #1d1d1d;
+          cursor: pointer;
 
           &:hover {
-            color: #e23838;
-            cursor: pointer;
+            color: #BBB;
           }
         }
 
-        span {
-          clear: both;
+        &.Selected {
+          background-color: #1d1d1d;
+          color: #e6e6e6;
+          font-weight: bold;
+          border-bottom: solid 3px #b22532;
+          cursor: default;
         }
       }
     }
 
-    > p {
-      color: rgb(90, 90, 90);
-      padding: 0 15px;
-      margin: 15px 0;
+    .TabPage {
+      width: 100%;
+      height: calc(100% - 35px);
     }
 
-    .Creator {
-      display: flex;
-      align-items: center;
-      padding: 0 15px;
-
-      a, img {
-        width: 30px;
-        height: 30px;
-        display: block;
+    .Metadata {
+      .Banner {
+        width: 250px;
+        height: 150px;
+        margin-bottom: 15px;
+        background-size: cover;
+        background-position: center center;
       }
-
-      a {
-        margin-right: 8px;
-        transition-property: opacity;
-        transition-duration: .2s;
-
-        &:hover {
-          opacity: .6;
+  
+      .Markdown {
+        margin-bottom: 20px;
+        padding: 0 15px;
+      }
+  
+      > h3 {
+        color: #b30032;
+        font-size: 1.2em;
+        margin: 10px 0;
+        padding: 0 15px;
+  
+        &.About {
+          svg {
+            color: white;
+            float: right;
+  
+            &:hover {
+              color: #e23838;
+              cursor: pointer;
+            }
+          }
+  
+          span {
+            clear: both;
+          }
         }
       }
-
-      img {
-        border-radius: 15px;
+  
+      > p {
+        color: rgb(90, 90, 90);
+        padding: 0 15px;
+        margin: 15px 0;
       }
-
-      b {
-        color: #dbdbdb;
-        display: block;
+  
+      .Creator {
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+  
+        a, img {
+          width: 30px;
+          height: 30px;
+          display: block;
+        }
+  
+        a {
+          margin-right: 8px;
+          transition-property: opacity;
+          transition-duration: .2s;
+  
+          &:hover {
+            opacity: .6;
+          }
+        }
+  
+        img {
+          border-radius: 15px;
+        }
+  
+        b {
+          color: #dbdbdb;
+          display: block;
+        }
       }
     }
   }

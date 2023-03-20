@@ -186,7 +186,6 @@ export const useChannel = (channelID: string): ChannelState => {
             const messages: ChannelMessage[] = [];
             for (const e of events) {
               if (e.received.event.kind === 1 || e.received.event.kind === 42) {
-                console.log('receive kind 1', e);
                 messages.push({
                   id: e.received.event.id,
                   isNote: e.received.event.kind === 1,

@@ -45,7 +45,7 @@ const reducer = (state: FolloweeState, action: FolloweeStateAction): FolloweeSta
         state.notes[note.id] = note;
       }
       state.sortedNotes = Object.values(state.notes)
-        .sort((a, b) => b.createdAt - a.createdAt).slice(0, 50);
+        .sort((a, b) => b.createdAt - a.createdAt).slice(0, 100);
       break;
 
     case 'ADD_MESSAGES':

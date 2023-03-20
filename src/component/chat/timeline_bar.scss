@@ -1,0 +1,36 @@
+@use '../shared.scss';
+
+#TimelineBar {
+  height: 100%;
+  overflow: hidden;
+
+  .Note {
+    min-height: 24px;
+    margin: 10px 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+    display: flex;
+
+    animation-name: onAddedElement;
+    animation-duration: 0.5s;
+
+    .Icon {
+      width: 24px;
+
+      img {
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
+        display: block;
+      }
+    }
+
+    p {
+      color: #aaa;
+      margin-left: 10px;
+      flex-grow: 1;
+      font-size: 0.95em;
+      line-height: 1.7;
+    }
+  }
+}

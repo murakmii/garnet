@@ -3,13 +3,12 @@ import { utils } from 'nostr-mux';
 
 import { useApp } from '../../state/app';
 import { useProfile } from '../../state/profile';
-import { Button, Select } from '../common/form';
+import { Button } from '../common/form';
 import './basic.scss';
-import { ReactElement } from 'react';
 import { T } from '../../hooks/i18n';
 
 export const BasicSetting = () => {
-  const { app, signOut, enableAmbientTimeline, changeLang } = useApp();
+  const { app, signOut, changeLang } = useApp();
   const profile = useProfile(app.pubkey);
 
   const doSignOut = () => {
@@ -35,20 +34,6 @@ export const BasicSetting = () => {
             <Button onClick={doSignOut}>SIGN OUT</Button>
           </>
         )}
-      </div>
-
-      <h3><T transKey="settings_basic_ui" /></h3>
-      <div className="UI Category">
-        <div className="Row">
-          <input type="checkbox" 
-            id="EnableAmbientTimeline" 
-            onChange={(e) => enableAmbientTimeline(e.target.checked)}
-            checked={app.config.enableAmbientTimeline} />
-          <label htmlFor="EnableAmbientTimeline"><T transKey="settings_basic_show_amb_label" /></label>
-        </div>
-        <p className="Description">
-          <T transKey="settings_basic_show_amb_tip" />
-        </p>
       </div>
 
       <h3><T transKey="settings_basic_lang" /></h3>

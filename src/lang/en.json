@@ -36,21 +36,8 @@
       "text": "Sign in information"
     },
     {
-      "key": "settings_basic_ui",
-      "text": "UI setting"
-    },
-    {
       "key": "settings_basic_lang",
       "text": "Language setting"
-    },
-
-    {
-      "key": "settings_basic_show_amb_label",
-      "text": "Show Ambient Timeline"
-    },
-    {
-      "key": "settings_basic_show_amb_tip",
-      "text": "\"Ambient Timeline\" that is positioned at right-bottom in channel shows your followee's notes"
     },
 
     {

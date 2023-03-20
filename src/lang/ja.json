@@ -36,21 +36,8 @@
       "text": "サインイン情報"
     },
     {
-      "key": "settings_basic_ui",
-      "text": "UI設定"
-    },
-    {
       "key": "settings_basic_lang",
       "text": "言語設定"
-    },
-
-    {
-      "key": "settings_basic_show_amb_label",
-      "text": "アンビエントタイムラインを表示する"
-    },
-    {
-      "key": "settings_basic_show_amb_tip",
-      "text": "アンビエントタイムラインとは、チャンネルのメッセージ一覧右下に小さく表示されるタイムラインです。"
     },
 
     {

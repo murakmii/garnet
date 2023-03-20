@@ -16,13 +16,11 @@ export type AppContext = {
   unPinChannel: (channel: string) => void;
   readChatMessage: (channel: string, timestamp: number) => void;
 
-  enableAmbientTimeline: (enable: boolean) => void;
   changeLang: (lang: SupportedLang) => void;
 };
 
 export type Config = {
   pinChannels: { id: string, lastRead: number }[];
-  enableAmbientTimeline: boolean;
   lang: SupportedLang;
 }
 
@@ -36,7 +34,6 @@ type AppStateAction = SignInAction
   | PinChannelAction 
   | UnPinChannelAction 
   | ReadChatMessage
-  | EnableAmbientTimelineAction
   | ChangeLangAction
 
 type SignInAction = { type: 'SIGN_IN', pubkey: string };
@@ -44,7 +41,6 @@ type SignOutAction = { type: 'SIGN_OUT' };
 type PinChannelAction = { type: 'PIN_CHANNEL', channel: string, lastRead: number };
 type UnPinChannelAction = { type: 'UNPIN_CHANNEL', channel: string };
 type ReadChatMessage = { type: 'READ_CHAT_MESSAGE', channel: string, timestamp: number };
-type EnableAmbientTimelineAction = { type: 'ENABLE_AMBIENT_TIMELINE', enable: boolean };
 type ChangeLangAction = { type: 'CHANGE_LANG', lang: SupportedLang };
 
 const pubkeyConfig = 'garnet.pubkey';
@@ -74,7 +70,7 @@ const autoProfileSub = new AutoProfileSubscriber<GenericProfile>({
   collectPubkeyFromEvent: (e, relayURL) => {
     return (relayURL && e.kind === 42) ? [e.pubkey] : [];
   },
-  tickInterval: 1500,
+  tickInterval: 2500,
 });
 
 mux.installPlugin(autoProfileSub);
@@ -98,7 +94,7 @@ if (pubkey) {
 }
 
 const App = React.createContext<AppContext>({
-  app: { pubkey, config: { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang } },
+  app: { pubkey, config: { pinChannels: [], lang: defaultLang } },
 
   mux,
   autoProfileSub,
@@ -109,7 +105,6 @@ const App = React.createContext<AppContext>({
   pinChannel: () => {},
   unPinChannel: () => {},
   readChatMessage: () => {},
-  enableAmbientTimeline: () => {},
   changeLang: () => {},
 });
 
@@ -134,7 +129,7 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
     
     case 'SIGN_OUT':
       if (state.pubkey) {
-        state = { pubkey: undefined, config: { pinChannels: [], enableAmbientTimeline: true, lang: state.config.lang } }; // 言語は引継ぎ
+        state = { pubkey: undefined, config: { pinChannels: [], lang: state.config.lang } }; // 言語は引継ぎ
         
         if (personalizer) {
           mux.uninstallPlugin(personalizer.id());
@@ -170,12 +165,6 @@ const reducer = (state: AppState, action: AppStateAction): AppState => {
       }
       break;
 
-    case 'ENABLE_AMBIENT_TIMELINE':
-      state = { ...state };
-      state.config = { ...state.config, enableAmbientTimeline: action.enable };
-      localStorage.setItem(configKey, JSON.stringify(state.config));
-      break;
-
     case 'CHANGE_LANG':
       state = { ...state };
       state.config = { ...state.config, lang: action.lang };
@@ -191,14 +180,14 @@ const parseConfig = (): Config => {
   try {
     mayBeConfig = JSON.parse(localStorage.getItem(configKey) || '{}');
   } catch {
-    return { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang };
+    return { pinChannels: [], lang: defaultLang };
   }
 
   if (mayBeConfig === null || Array.isArray(mayBeConfig) || typeof mayBeConfig !== 'object') {
-    return { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang };
+    return { pinChannels: [], lang: defaultLang };
   }
 
-  const config: Config = { pinChannels: [], enableAmbientTimeline: true, lang: defaultLang };
+  const config: Config = { pinChannels: [], lang: defaultLang };
   const { pinChannels, enableAmbientTimeline, lang } = mayBeConfig;
 
   if (Array.isArray(pinChannels)) {
@@ -214,10 +203,6 @@ const parseConfig = (): Config => {
     }
   }
 
-  if (typeof enableAmbientTimeline === 'boolean') {
-    config.enableAmbientTimeline = enableAmbientTimeline;
-  }
-
   config.lang = (typeof lang === 'string' && (lang === 'ja' || lang === 'en')) ? lang : defaultLang;
 
   return config;
@@ -226,7 +211,6 @@ const parseConfig = (): Config => {
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, { pubkey, config: pubkey ? parseConfig() : { 
     pinChannels: [], 
-    enableAmbientTimeline: true, 
     lang: defaultLang 
   } });
 
@@ -235,7 +219,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const pinChannel = (channel: string, lastRead: number) => dispatch({ type: 'PIN_CHANNEL', channel, lastRead });
   const unPinChannel = (channel: string) => dispatch({ type: 'UNPIN_CHANNEL', channel });
   const readChatMessage = (channel: string, timestamp: number) => dispatch({ type: 'READ_CHAT_MESSAGE', channel, timestamp });
-  const enableAmbientTimeline = (enable: boolean) => dispatch({ type: 'ENABLE_AMBIENT_TIMELINE', enable });
   const changeLang = (lang: SupportedLang) => dispatch({ type: 'CHANGE_LANG', lang });
 
   const ctx = {
@@ -250,7 +233,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     pinChannel,
     unPinChannel,
     readChatMessage,
-    enableAmbientTimeline,
     changeLang,
   }
 

@@ -18,10 +18,10 @@ import { useResizing } from '../../state/resizing';
 import { ChannelForm } from '../common/channel_form';
 import { DialogBackground, ErrorHeader, Markdown } from '../common/parts';
 import { PageHeaderClickableIcon } from '../common/page_header';
-import { AmbientTimeline } from './ambient_timeline';
 import { ChannelMessageView } from '../common/channel_message_view';
 import { translate } from '../../lib/i18n';
 import { channelURLPrefix } from '../../const';
+import { TimelineBar } from './timeline_bar';
 
 const emptyMatcher = /^\s*$/;
 
@@ -126,10 +126,13 @@ const Form = ({ channel }: { channel?: Channel }) => {
   );
 };
 
+type Tab = 'metadata' | 'timeline';
+
 export const ChannelView = () => {
   const channelID = useParams().channelID as string;
   
   const { app, pinChannel, unPinChannel, readChatMessage } = useApp();
+  const [selectedTab, setSelectedTab] = useState<Tab>(app.pubkey ? 'timeline' : 'metadata');
   const pin = app.config.pinChannels.find(c => c.id === channelID);
   const state = useChannel(channelID);
   const ownerIsMe = app.pubkey && app.pubkey === state.channel?.metadata.creator;
@@ -205,6 +208,14 @@ export const ChannelView = () => {
     );
   }
 
+  const onClickTab = (e: React.MouseEvent<HTMLDivElement>): void => {
+    if (e.currentTarget.classList.contains("Selected")) {
+      return;
+    }
+
+    setSelectedTab(e.currentTarget.dataset.tab === 'metadata' ? 'metadata' : 'timeline');
+  };
+
   return (
     <div id="ChannelView">
       <PageHeader>
@@ -223,38 +234,55 @@ export const ChannelView = () => {
             {messages.map(m => <ChannelMessageView key={m.id} message={m} />)}
           </div>
 
-          {app.pubkey && app.config.enableAmbientTimeline && <AmbientTimeline />}
-
           <Form channel={state.channel} />
         </div>
 
         <div className="ChannelMetadata">
-          {state.channel?.metadata.picture && (
-            <div className="Banner" style={{ backgroundImage: `url(${state.channel?.metadata.picture})` }}>
-            </div>
-          )}
-
-          {state.channel && (
-            <>
-              <h3 className="About">
-                ABOUT
-                {ownerIsMe && <><FaEdit onClick={editMetadata} /><span /></>}
-              </h3>
-              {state.channel?.metadata.about ? <Markdown md={state.channel?.metadata.about} /> : <p>No description</p>}
-            </>
-          )}
-
-          {creator && (
-            <>
-              <h3>OWNER</h3>
-              <div className="Creator">
-                <Link to={`/users/${creator.pubkey}`}>
-                  <img src={creator.iconURL} alt={creator.name} />
-                </Link>
-                <b className={creator.notFound ? 'Pseudo' : ''}>{creator.name}</b>
+          <div className="Tabs">
+            {app.pubkey && (
+              <div data-tab="timeline" className={"Tab " + (selectedTab === 'timeline' ? 'Selected' : '')} onClick={onClickTab}>
+                TIMELINE
               </div>
-            </>
-          )}
+            )}
+            <div data-tab="metadata" className={"Tab " + (selectedTab === 'metadata' ? 'Selected' : '')} onClick={onClickTab}>
+              INFO
+            </div>
+          </div>
+
+          <div className="TabPage">
+            {selectedTab === 'metadata' && (
+              <div className={"Metadata " + (selectedTab === 'metadata' ? 'Selected' : '')}>
+                {state.channel?.metadata.picture && (
+                  <div className="Banner" style={{ backgroundImage: `url(${state.channel?.metadata.picture})` }}>
+                  </div>
+                )}
+
+                {state.channel && (
+                  <>
+                    <h3 className="About">
+                      ABOUT
+                      {ownerIsMe && <><FaEdit onClick={editMetadata} /><span /></>}
+                    </h3>
+                    {state.channel?.metadata.about ? <Markdown md={state.channel?.metadata.about} /> : <p>No description</p>}
+                  </>
+                )}
+
+                {creator && (
+                  <>
+                    <h3>OWNER</h3>
+                    <div className="Creator">
+                      <Link to={`/users/${creator.pubkey}`}>
+                        <img src={creator.iconURL} alt={creator.name} />
+                      </Link>
+                      <b className={creator.notFound ? 'Pseudo' : ''}>{creator.name}</b>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {selectedTab === 'timeline' && <TimelineBar />}
+          </div>
         </div>
 
         {showMetadataEditor && (
