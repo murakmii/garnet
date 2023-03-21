@@ -114,7 +114,7 @@ const Form = ({ channel }: { channel?: Channel }) => {
         <div className="Space"></div>
       
         <CheckBox name="asNote" checked={asNote} onChange={e => setAsNote(e.target.checked)}>
-          As Note
+          Shared
           <AiFillExperiment />
         </CheckBox>
         

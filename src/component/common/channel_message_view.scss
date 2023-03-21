@@ -67,16 +67,38 @@
     }
   }
 
-  .Mark {
-    font-size: 1.3em;
-    color: white;
-    margin-left: 5px;
-    display: none;
+  &:not(.Note) {
+    justify-content: start;
+
+    .Body {
+      margin-right: 56px;
+    }
+
+    .Icon {
+      margin-right: 8px;
+    }
   }
 
   &.Note {
-    .Mark {
-      display: block;
+    justify-content: end;
+
+    .Body {
+      margin-left: 56px;
+    }
+
+    .Icon {
+      margin-left: 8px;
+    }
+
+    .Body {
+      .Content {
+        background-color: rgb(179, 63, 63);
+        border: solid 1px rgb(207, 81, 81);
+
+        .UserName {
+          color: #d97c75;
+        }
+      }
     }
   }
 }

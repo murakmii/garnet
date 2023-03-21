@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { FaExternalLinkSquareAlt } from 'react-icons/fa';
-import { GiNotebook } from 'react-icons/gi';
 
 import './channel_message_view.scss';
 import { ChannelMessage } from '../../state/channel';
@@ -17,17 +16,19 @@ export const ChannelMessageView = ({ message, showChannelLink }: ChannelMessageV
 
   return (
     <div className={'ChannelMessageView ' + (message.isNote ? 'Note' : '')}>
-      <div className="Icon">
-        {profile && (
-          profile.notFound ? (
-            <img src={profile.iconURL } alt={profile.name} />
-          ) : (
-            <Link to={`/users/${profile.pubkey}`}>
+      {!message.isNote && (
+        <div className="Icon">
+          {profile && (
+            profile.notFound ? (
               <img src={profile.iconURL } alt={profile.name} />
-            </Link>
-          )
-        )}
-      </div>
+            ) : (
+              <Link to={`/users/${profile.pubkey}`}>
+                <img src={profile.iconURL } alt={profile.name} />
+              </Link>
+            )
+          )}
+        </div>
+      )}
 
       <div className="Body">
         <div className="Content">
@@ -41,7 +42,17 @@ export const ChannelMessageView = ({ message, showChannelLink }: ChannelMessageV
       </div>
 
       {message.isNote && (
-        <GiNotebook className="Mark" />
+        <div className="Icon">
+          {profile && (
+            profile.notFound ? (
+              <img src={profile.iconURL } alt={profile.name} />
+            ) : (
+              <Link to={`/users/${profile.pubkey}`}>
+                <img src={profile.iconURL } alt={profile.name} />
+              </Link>
+            )
+          )}
+        </div>
       )}
     </div>
   )
