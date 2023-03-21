@@ -68,9 +68,14 @@ const autoProfileSub = new AutoProfileSubscriber<GenericProfile>({
   parser: parseGenericProfile,
   autoEvict: false,
   collectPubkeyFromEvent: (e, relayURL) => {
-    return (relayURL && e.kind === 42) ? [e.pubkey] : [];
+    return (relayURL && (e.kind === 1 || e.kind === 42)) ? [e.pubkey] : [];
   },
-  tickInterval: 2500,
+  earlyCallbackPredicate: (_, expectedEoses, remain) => {
+    // 8割のリレーが応答した時点で結果を返す
+    return (remain / expectedEoses) <= 0.2;
+  },
+  tickInterval: 3000,
+  timeout: 2000,
 });
 
 mux.installPlugin(autoProfileSub);
