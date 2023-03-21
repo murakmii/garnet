@@ -5,6 +5,7 @@ export type ChannelProperties = {
   name?: string;
   about?: string;
   picture?: string;
+  youtube?: string
 }
 
 export type ChannelMetadata = {
@@ -118,7 +119,7 @@ export const parseChannelMetadata = (event: Event): ChannelMetadata[] => {
 };
 
 const parseChannelProperties = (mayBeProps: any): ChannelProperties | undefined =>  {
-  const { id, name, about, picture } = mayBeProps;
+  const { id, name, about, picture, youtube } = mayBeProps;
   const props: ChannelProperties = {};
 
   if (typeof id === 'string' && id.length > 0) {
@@ -135,6 +136,10 @@ const parseChannelProperties = (mayBeProps: any): ChannelProperties | undefined 
 
   if (typeof picture === 'string' && picture.length > 0) {
     props.picture = picture;
+  }
+
+  if (typeof youtube === 'string' && youtube.length > 0) {
+    props.youtube = youtube;
   }
 
   return props;

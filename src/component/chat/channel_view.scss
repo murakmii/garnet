@@ -2,6 +2,7 @@
 @use 'sass:math';
 
 $inputMessageHeight: 130px;
+$theaterHeight: 270px;
 
 #ChannelView {
   width: 100%;
@@ -31,12 +32,19 @@ $inputMessageHeight: 130px;
       width: calc(100% - 250px);
       height: 100%;
       position: relative;
+      
+      .Messages {
+        height: calc(100% - $inputMessageHeight);
+      }
+
+      &.Theater .Messages {
+        height: calc(100% - $inputMessageHeight - $theaterHeight);
+      }
     }
   }
 
   .Messages {
     width: 100%;
-    height: calc(100% - $inputMessageHeight);
     overflow-y: scroll;
     box-sizing: border-box;
     padding: 10px 16px;
@@ -243,5 +251,22 @@ $inputMessageHeight: 130px;
         }
       }
     }
+  }
+}
+
+#Theater {
+  height: 270px;
+  background-color: black;
+}
+
+#YouTubeViewer {
+  width: 100%;
+  height: 100%;
+
+  iframe {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 }

@@ -10,7 +10,7 @@ import { Event, Tag } from 'nostr-mux';
 import { Channel } from '../../state/channels';
 import { ChannelMetadata } from '../../lib/nostr';
 import { useChannelMetadata } from '../../state/channel_metadata';
-import { channelURLPrefix } from '../../const';
+import { channelURLPrefix, youtubeURLPattern } from '../../const';
 
 export type ChannelFormProps = {
   title: string;
@@ -22,12 +22,14 @@ type Values = {
   name: string;
   about: string;
   picture: string;
+  youtube: string;
 };
 
 type ValidatedValues = {
   name: string;
   about?: string;
   picture?: string;
+  youtube?: string;
 };
 
 const buildEventForCreation = (values: ValidatedValues): Promise<Event> => {
@@ -82,20 +84,28 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
   const [values, setValues] = useState<Values>({ 
     name: channel?.metadata.name || '', 
     about: channel?.metadata?.about || '', 
-    picture: channel?.metadata?.picture || ''
+    picture: channel?.metadata?.picture || '',
+    youtube: channel?.metadata?.youtube || '',
   });
 
   useEffect(() => {
-    const validInput = values.name.length > 0 && (
-      values.picture.length === 0 || 
-      values.picture.startsWith('http://') || 
-      values.picture.startsWith('https://')
-    );;
+    const validPic = values.picture.length === 0 || 
+                      values.picture.startsWith('http://') || 
+                      values.picture.startsWith('https://');
+
+    const validYT = values.youtube.length === 0 ||
+                      youtubeURLPattern.test(values.youtube);
+
+    const validInput = values.name.length > 0 && validPic && validYT;
 
     let changed = true;
     if (channel) {
-      const metaName = channel?.metadata.name || '', metaAbout = channel?.metadata.about || '', metaPic = channel?.metadata.picture || '';
-      changed = values.name !== metaName || values.about !== metaAbout || values.picture !== metaPic;
+      const metaName = channel?.metadata.name || '', 
+        metaAbout = channel?.metadata.about || '', 
+        metaPic = channel?.metadata.picture || '',
+        metaYT = channel?.metadata.youtube || '';
+
+      changed = values.name !== metaName || values.about !== metaAbout || values.picture !== metaPic || values.youtube !== metaYT;
     }
 
     setValid(validInput && changed);
@@ -131,6 +141,10 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
 
         if (values.picture.length > 0) {
           content.picture = values.picture;
+        }
+
+        if (values.youtube.length > 0) {
+          content.youtube = values.youtube;
         }
 
         (channel ? buildEventForUpdate(channel, content, metadata) : buildEventForCreation(content))
@@ -184,6 +198,9 @@ export const ChannelForm = ({title, channel, onClose }: ChannelFormProps) => {
 
       <h3>PICTURE</h3>
       <TextArea name="picture" placeholder="https://..."  value={values.picture} onChange={onChanged} />
+
+      <h3>YOUTUBE</h3>
+      <TextArea name="youtube" placeholder="https://www.youtube.com/watch?v=<vido id>"  value={values.youtube} onChange={onChanged} />
 
       <div className="Buttons">
         <Link to="/help"><MdHelp /></Link>

@@ -54,6 +54,7 @@ export const otherRouteEntries: RouteEntry[] = [
 export const allRouteEntries: RouteEntry[] = helpRouteEntries.concat(settingsRouteEntries).concat(otherRouteEntries);
 
 export const eventIDPattern = /^[0-9abcdef]{64}$/;
+export const youtubeURLPattern = /^https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_\-]+)$/;
 
 export const channelURLPrefix = 'https://garnet.nostrian.net/channels/';
 

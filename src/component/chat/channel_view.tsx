@@ -20,7 +20,7 @@ import { DialogBackground, ErrorHeader, Markdown } from '../common/parts';
 import { PageHeaderClickableIcon } from '../common/page_header';
 import { ChannelMessageView } from '../common/channel_message_view';
 import { translate } from '../../lib/i18n';
-import { channelURLPrefix } from '../../const';
+import { channelURLPrefix, youtubeURLPattern } from '../../const';
 import { TimelineBar } from './timeline_bar';
 
 const emptyMatcher = /^\s*$/;
@@ -126,6 +126,18 @@ const Form = ({ channel }: { channel?: Channel }) => {
   );
 };
 
+const YouTubeViewer = ({ videoID }: { videoID: string }) => {
+  return (
+    <div id="YouTubeViewer">
+      <iframe 
+        id="player" 
+        src={`https://www.youtube.com/embed/${videoID}?origin=https://garnet.nostrian.net`}
+        frameBorder="0">  
+      </iframe>
+    </div>
+  )
+};
+
 type Tab = 'metadata' | 'timeline';
 
 export const ChannelView = () => {
@@ -208,6 +220,8 @@ export const ChannelView = () => {
     );
   }
 
+  const ytVideoID = (state.channel?.metadata.youtube || '').match(youtubeURLPattern)?.[1];
+
   const onClickTab = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (e.currentTarget.classList.contains("Selected")) {
       return;
@@ -229,7 +243,13 @@ export const ChannelView = () => {
       </PageHeader>
 
       <div className="PageContent">
-        <div className="Center">
+        <div className={"Center " + (ytVideoID ? 'Theater' : '')}>
+          {ytVideoID && (
+            <div id="Theater">
+              <YouTubeViewer videoID={ytVideoID} />
+            </div>
+          )}
+
           <div className="Messages" onScroll={onScrollMessages} ref={messagesRef}>
             {messages.map(m => <ChannelMessageView key={m.id} message={m} />)}
           </div>
